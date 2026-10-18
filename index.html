@@ -8,72 +8,85 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Icons CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#f0f9ff',
-              100: '#e0f2fe',
-              500: '#0284c7',
-              600: '#0369a1',
-              700: '#075985',
-              800: '#0c4a6e',
-              900: '#0f172a',
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
+    * {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
     body {
-      background-color: #0b0f19;
+      background-color: #080c14;
       color: #f3f4f6;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(168, 85, 247, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
     }
     .glass-card {
-      background: rgba(17, 24, 39, 0.75);
-      backdrop-filter: blur(12px);
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
     }
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
+    .glass-header {
+      background: rgba(8, 12, 20, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: rgba(15, 23, 42, 0.6);
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: rgba(56, 189, 248, 0.25);
-      border-radius: 4px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: rgba(56, 189, 248, 0.5);
-    }
+    
+    /* Temas de Tarjetas */
+    .theme-default { background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .theme-neon { background: linear-gradient(135deg, rgba(88, 28, 135, 0.35), rgba(15, 23, 42, 0.85)); border: 1px solid rgba(168, 85, 247, 0.3); box-shadow: 0 0 20px rgba(168, 85, 247, 0.1); }
+    .theme-fire { background: linear-gradient(135deg, rgba(153, 27, 27, 0.35), rgba(15, 23, 42, 0.85)); border: 1px solid rgba(239, 68, 68, 0.3); box-shadow: 0 0 20px rgba(239, 68, 68, 0.1); }
+    .theme-ocean { background: linear-gradient(135deg, rgba(12, 74, 110, 0.35), rgba(15, 23, 42, 0.85)); border: 1px solid rgba(56, 189, 248, 0.3); box-shadow: 0 0 20px rgba(56, 189, 248, 0.1); }
+    .theme-emerald { background: linear-gradient(135deg, rgba(6, 78, 59, 0.35), rgba(15, 23, 42, 0.85)); border: 1px solid rgba(52, 211, 153, 0.3); box-shadow: 0 0 20px rgba(52, 211, 153, 0.1); }
+
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.25); border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.5); }
   </style>
 </head>
 <body class="min-h-screen flex flex-col font-sans antialiased custom-scrollbar">
 
   <!-- Header -->
-  <header class="sticky top-0 z-40 glass-card border-b border-gray-800">
-    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+  <header class="sticky top-0 z-40 glass-header border-b border-gray-800/80">
+    <div class="max-w-4xl mx-auto px-4 py-3.5 flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-sky-500/20">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sky-400 via-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-sky-500/25">
           <i class="fa-solid fa-user-secret"></i>
         </div>
         <div>
-          <h1 class="font-bold text-lg text-white leading-tight">Muro Anónimo</h1>
-          <p class="text-xs text-sky-400 flex items-center gap-1">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <h1 class="font-extrabold text-lg text-white tracking-tight flex items-center gap-2">
+            Muro Anónimo
+            <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2 py-0.5 rounded-full font-semibold">v2.0</span>
+          </h1>
+          <p class="text-xs text-sky-400/90 flex items-center gap-1.5 font-medium">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400"></span>
             En vivo • Confesiones en tiempo real
           </p>
         </div>
       </div>
       
-      <button id="openPublishModalBtn" class="bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-semibold px-4 py-2 rounded-xl text-sm transition-all duration-200 shadow-md shadow-sky-500/20 flex items-center gap-2">
-        <i class="fa-solid fa-pen-nib"></i>
-        <span>Publicar</span>
-      </button>
+      <div class="flex items-center gap-2">
+        <button id="toggleSortBtn" title="Ordenar por populares" class="bg-gray-900/80 hover:bg-gray-800 text-amber-400 p-2.5 rounded-xl text-sm transition-all border border-gray-700/60 flex items-center gap-1.5 hover:shadow-md hover:shadow-amber-500/10">
+          <i class="fa-solid fa-fire text-amber-400"></i>
+          <span class="text-xs text-gray-300 font-semibold hidden sm:inline" id="sortLabel">Más recientes</span>
+        </button>
+
+        <button id="randomPostBtn" title="Confesión Aleatoria" class="bg-gray-900/80 hover:bg-gray-800 text-sky-400 p-2.5 rounded-xl text-sm transition-all border border-gray-700/60 hover:shadow-md hover:shadow-sky-500/10">
+          <i class="fa-solid fa-dice text-lg"></i>
+        </button>
+
+        <button id="openPublishModalBtn" class="bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-600 hover:from-sky-400 hover:to-purple-500 text-white font-bold px-4 py-2 rounded-xl text-sm transition-all duration-200 shadow-lg shadow-indigo-500/25 flex items-center gap-2 active:scale-95">
+          <i class="fa-solid fa-pen-nib text-xs"></i>
+          <span class="hidden sm:inline">Publicar</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -81,84 +94,109 @@
   <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-6">
     
     <!-- Hero / Banner -->
-    <div class="glass-card rounded-2xl p-6 mb-6 text-center relative overflow-hidden">
-      <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-sky-500/10 rounded-full blur-2xl pointer-events-none"></div>
-      <div class="absolute -left-10 -top-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none"></div>
+    <div class="glass-card rounded-3xl p-6 sm:p-8 mb-6 text-center relative overflow-hidden">
+      <div class="absolute -right-12 -bottom-12 w-48 h-48 bg-sky-500/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-12 -top-12 w-48 h-48 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none"></div>
       
-      <h2 class="text-2xl font-bold text-white mb-2">Expresa lo que nunca dijiste</h2>
-      <p class="text-gray-400 text-sm max-width-md mx-auto mb-4">
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-2 tracking-tight">Expresa lo que nunca dijiste</h2>
+      <p class="text-gray-400 text-sm max-w-md mx-auto mb-6 leading-relaxed">
         Un espacio 100% anónimo para compartir tus secretos, historias, arrepentimientos o pensamientos sin juzgar.
       </p>
 
+      <!-- Buscador -->
+      <div class="max-w-md mx-auto mb-6 relative">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-gray-500 text-sm"></i>
+        <input type="text" id="searchInput" placeholder="Buscar por contenido o #hashtag..." class="w-full bg-gray-950/80 border border-gray-700/80 rounded-2xl pl-11 pr-4 py-2.5 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 transition-all shadow-inner">
+      </div>
+
       <!-- Category Filter Pills -->
-      <div class="flex flex-wrap items-center justify-center gap-2 pt-2" id="categoryFilters">
-        <button data-cat="todos" class="cat-pill active bg-sky-500/20 text-sky-300 border border-sky-500/40 px-3 py-1 rounded-full text-xs font-medium transition-all">Todos</button>
-        <button data-cat="Amor" class="cat-pill bg-gray-800/80 text-gray-400 hover:text-gray-200 border border-gray-700/50 px-3 py-1 rounded-full text-xs font-medium transition-all">❤️ Amor</button>
-        <button data-cat="Secreto" class="cat-pill bg-gray-800/80 text-gray-400 hover:text-gray-200 border border-gray-700/50 px-3 py-1 rounded-full text-xs font-medium transition-all">🤫 Secreto</button>
-        <button data-cat="Trabajo" class="cat-pill bg-gray-800/80 text-gray-400 hover:text-gray-200 border border-gray-700/50 px-3 py-1 rounded-full text-xs font-medium transition-all">💼 Trabajo</button>
-        <button data-cat="Familiar" class="cat-pill bg-gray-800/80 text-gray-400 hover:text-gray-200 border border-gray-700/50 px-3 py-1 rounded-full text-xs font-medium transition-all">🏠 Familiar</button>
-        <button data-cat="Vergonzoso" class="cat-pill bg-gray-800/80 text-gray-400 hover:text-gray-200 border border-gray-700/50 px-3 py-1 rounded-full text-xs font-medium transition-all">😳 Vergonzoso</button>
-        <button data-cat="Desahogo" class="cat-pill bg-gray-800/80 text-gray-400 hover:text-gray-200 border border-gray-700/50 px-3 py-1 rounded-full text-xs font-medium transition-all">🌧️ Desahogo</button>
+      <div class="flex flex-wrap items-center justify-center gap-2" id="categoryFilters">
+        <button data-cat="todos" class="cat-pill active bg-sky-500/20 text-sky-300 border border-sky-500/40 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all shadow-sm">Todos</button>
+        <button data-cat="favoritos" class="cat-pill bg-gray-900/80 text-amber-400 hover:text-amber-200 border border-gray-700/60 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all">⭐ Mis Favoritos</button>
+        <button data-cat="Amor" class="cat-pill bg-gray-900/80 text-gray-400 hover:text-gray-200 border border-gray-700/60 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all">❤️ Amor</button>
+        <button data-cat="Secreto" class="cat-pill bg-gray-900/80 text-gray-400 hover:text-gray-200 border border-gray-700/60 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all">🤫 Secreto</button>
+        <button data-cat="Trabajo" class="cat-pill bg-gray-900/80 text-gray-400 hover:text-gray-200 border border-gray-700/60 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all">💼 Trabajo</button>
+        <button data-cat="Familiar" class="cat-pill bg-gray-900/80 text-gray-400 hover:text-gray-200 border border-gray-700/60 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all">🏠 Familiar</button>
+        <button data-cat="Vergonzoso" class="cat-pill bg-gray-900/80 text-gray-400 hover:text-gray-200 border border-gray-700/60 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all">😳 Vergonzoso</button>
+        <button data-cat="Desahogo" class="cat-pill bg-gray-900/80 text-gray-400 hover:text-gray-200 border border-gray-700/60 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all">🌧️ Desahogo</button>
       </div>
     </div>
 
     <!-- Feed Container -->
     <div id="postsFeed" class="space-y-4">
       <!-- Loading Skeleton -->
-      <div class="glass-card rounded-2xl p-5 animate-pulse space-y-3">
+      <div class="glass-card rounded-2xl p-6 animate-pulse space-y-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 rounded-full bg-gray-800"></div>
-            <div class="h-4 w-28 bg-gray-800 rounded"></div>
+            <div class="w-10 h-10 rounded-xl bg-gray-800"></div>
+            <div class="h-4 w-32 bg-gray-800 rounded-md"></div>
           </div>
-          <div class="h-3 w-16 bg-gray-800 rounded"></div>
+          <div class="h-4 w-20 bg-gray-800 rounded-md"></div>
         </div>
-        <div class="h-4 w-3/4 bg-gray-800 rounded"></div>
-        <div class="h-4 w-1/2 bg-gray-800 rounded"></div>
+        <div class="h-4 w-5/6 bg-gray-800 rounded-md"></div>
+        <div class="h-4 w-2/3 bg-gray-800 rounded-md"></div>
       </div>
     </div>
 
   </main>
 
   <!-- Publish Modal -->
-  <div id="publishModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm hidden opacity-0 transition-opacity duration-200">
-    <div class="glass-card w-full max-w-lg rounded-2xl p-6 relative border border-gray-700/60 shadow-2xl transform scale-95 transition-transform duration-200" id="modalContainer">
+  <div id="publishModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-200">
+    <div class="glass-card w-full max-w-lg rounded-3xl p-6 relative border border-gray-700/80 shadow-2xl transform scale-95 transition-transform duration-200" id="modalContainer">
       <button id="closePublishModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-800">
         <i class="fa-solid fa-xmark text-lg"></i>
       </button>
 
-      <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+      <h3 class="text-xl font-bold text-white mb-5 flex items-center gap-2">
         <i class="fa-solid fa-feather text-sky-400"></i>
         Escribir Confesión
       </h3>
 
       <form id="confessionForm" class="space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Categoría</label>
-          <select id="postCategory" class="w-full bg-gray-900/90 border border-gray-700 rounded-xl px-3 py-2 text-sm text-gray-200 focus:outline-none focus:border-sky-500">
-            <option value="Secreto">🤫 Secreto</option>
-            <option value="Amor">❤️ Amor</option>
-            <option value="Trabajo">💼 Trabajo</option>
-            <option value="Familiar">🏠 Familiar</option>
-            <option value="Vergonzoso">😳 Vergonzoso</option>
-            <option value="Desahogo">🌧️ Desahogo</option>
-          </select>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Categoría</label>
+            <select id="postCategory" class="w-full bg-gray-950/90 border border-gray-700 rounded-xl px-3 py-2.5 text-sm text-gray-200 focus:outline-none focus:border-sky-500">
+              <option value="Secreto">🤫 Secreto</option>
+              <option value="Amor">❤️ Amor</option>
+              <option value="Trabajo">💼 Trabajo</option>
+              <option value="Familiar">🏠 Familiar</option>
+              <option value="Vergonzoso">😳 Vergonzoso</option>
+              <option value="Desahogo">🌧️ Desahogo</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Estilo Visual</label>
+            <select id="postTheme" class="w-full bg-gray-950/90 border border-gray-700 rounded-xl px-3 py-2.5 text-sm text-gray-200 focus:outline-none focus:border-sky-500">
+              <option value="theme-default">🌌 Clásico Oscuro</option>
+              <option value="theme-neon">🔮 Misterio Neón</option>
+              <option value="theme-fire">🔥 Pasión / Fuego</option>
+              <option value="theme-ocean">🌊 Océano Profundo</option>
+              <option value="theme-emerald">🌲 Bosque Místico</option>
+            </select>
+          </div>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Tu Secreto o Historia</label>
-          <textarea id="postContent" rows="5" required maxlength="1000" placeholder="Cuenta tu historia libremente..." class="w-full bg-gray-900/90 border border-gray-700 rounded-xl p-3 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-sky-500 resize-none custom-scrollbar"></textarea>
+          <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Tu Secreto o Historia</label>
+          <textarea id="postContent" rows="4" required maxlength="1000" placeholder="Cuenta tu historia libremente..." class="w-full bg-gray-950/90 border border-gray-700 rounded-xl p-3.5 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-sky-500 resize-none custom-scrollbar"></textarea>
           <div class="flex justify-end mt-1">
             <span id="charCounter" class="text-xs text-gray-500">0 / 1000</span>
           </div>
         </div>
 
+        <div>
+          <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Hashtags (Opcional)</label>
+          <input type="text" id="postTags" placeholder="ej: #crush #universidad #ex" class="w-full bg-gray-950/90 border border-gray-700 rounded-xl px-3 py-2 text-sm text-gray-200 focus:outline-none focus:border-sky-500">
+        </div>
+
         <div class="flex items-center justify-between pt-2">
-          <span class="text-xs text-gray-400 flex items-center gap-1">
+          <span class="text-xs text-gray-400 flex items-center gap-1.5 font-medium">
             <i class="fa-solid fa-shield-halved text-emerald-400"></i>
             100% Anónimo
           </span>
-          <button type="submit" id="submitBtn" class="bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-semibold px-5 py-2.5 rounded-xl text-sm transition-all shadow-md shadow-sky-500/20 flex items-center gap-2">
+          <button type="submit" id="submitBtn" class="bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-600 hover:from-sky-400 hover:to-purple-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all shadow-lg shadow-indigo-500/25 flex items-center gap-2 active:scale-95">
             <span>Publicar</span>
             <i class="fa-solid fa-paper-plane text-xs"></i>
           </button>
@@ -168,9 +206,9 @@
   </div>
 
   <!-- Toast Notification Container -->
-  <div id="toast" class="fixed bottom-5 right-5 z-50 glass-card border border-sky-500/30 px-4 py-3 rounded-xl shadow-xl text-sm text-sky-200 flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300">
-    <i class="fa-solid fa-circle-check text-emerald-400"></i>
-    <span id="toastMessage">¡Publicado correctamente!</span>
+  <div id="toast" class="fixed bottom-6 right-6 z-50 glass-card border border-sky-500/30 px-4 py-3 rounded-2xl shadow-2xl text-sm text-sky-200 flex items-center gap-2.5 transform translate-y-24 opacity-0 transition-all duration-300">
+    <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+    <span id="toastMessage" class="font-medium">¡Publicado correctamente!</span>
   </div>
 
   <!-- Firebase Integration Script -->
@@ -178,7 +216,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // Credenciales de Firebase de tu proyecto (muro-anomino)
+    // Credenciales de Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyBAmZLBucqjAfJlsj-J6I8o6j4y6Tlk2f0",
       authDomain: "muro-anomino.firebaseapp.com",
@@ -199,17 +237,26 @@
     const confessionForm = document.getElementById("confessionForm");
     const postContent = document.getElementById("postContent");
     const postCategory = document.getElementById("postCategory");
+    const postTheme = document.getElementById("postTheme");
+    const postTags = document.getElementById("postTags");
     const charCounter = document.getElementById("charCounter");
     const publishModal = document.getElementById("publishModal");
     const modalContainer = document.getElementById("modalContainer");
     const openPublishModalBtn = document.getElementById("openPublishModalBtn");
     const closePublishModalBtn = document.getElementById("closePublishModalBtn");
     const submitBtn = document.getElementById("submitBtn");
+    const searchInput = document.getElementById("searchInput");
+    const randomPostBtn = document.getElementById("randomPostBtn");
+    const toggleSortBtn = document.getElementById("toggleSortBtn");
+    const sortLabel = document.getElementById("sortLabel");
 
     let activeFilter = "todos";
+    let searchQuery = "";
+    let sortByPopularity = false;
     let allPosts = [];
+    let savedPostIds = JSON.parse(localStorage.getItem('muro_favs') || '[]');
 
-    // Nombres y Avatares Anónimos Aleatorios
+    // Avatares Anónimos
     const anonymousAvatars = [
       { name: "Sombra Misteriosa", color: "from-purple-500 to-indigo-600", icon: "fa-ghost" },
       { name: "Pensador Nocturno", color: "from-blue-500 to-cyan-600", icon: "fa-moon" },
@@ -247,26 +294,43 @@
       if (e.target === publishModal) closeModal();
     });
 
-    // Contador de caracteres
     postContent.addEventListener("input", (e) => {
       charCounter.textContent = `${e.target.value.length} / 1000`;
     });
 
-    // Toast Notification
     function showToast(message) {
       const toast = document.getElementById("toast");
       document.getElementById("toastMessage").textContent = message;
-      toast.classList.remove("translate-y-20", "opacity-0");
+      toast.classList.remove("translate-y-24", "opacity-0");
       setTimeout(() => {
-        toast.classList.add("translate-y-20", "opacity-0");
+        toast.classList.add("translate-y-24", "opacity-0");
       }, 3000);
     }
 
-    // Guardar publicación en Firestore
+    // Formateador de Tiempo Relativo
+    function timeAgo(date) {
+      if (!date) return 'Hace un momento';
+      const seconds = Math.floor((new Date() - date) / 1000);
+      let interval = Math.floor(seconds / 31536000);
+      if (interval >= 1) return `Hace ${interval} año${interval > 1 ? 's' : ''}`;
+      interval = Math.floor(seconds / 2592000);
+      if (interval >= 1) return `Hace ${interval} mes${interval > 1 ? 'es' : ''}`;
+      interval = Math.floor(seconds / 86400);
+      if (interval >= 1) return `Hace ${interval} día${interval > 1 ? 's' : ''}`;
+      interval = Math.floor(seconds / 3600);
+      if (interval >= 1) return `Hace ${interval} h`;
+      interval = Math.floor(seconds / 60);
+      if (interval >= 1) return `Hace ${interval} min`;
+      return 'Hace un momento';
+    }
+
+    // Guardar publicación
     confessionForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const content = postContent.value.trim();
       const category = postCategory.value;
+      const theme = postTheme.value;
+      const tags = postTags.value.trim();
 
       if (!content) return;
 
@@ -278,10 +342,14 @@
         await addDoc(confessionsRef, {
           content: content,
           category: category,
+          theme: theme || 'theme-default',
+          tags: tags || '',
           authorName: avatar.name,
           authorColor: avatar.color,
           authorIcon: avatar.icon,
           likes: 0,
+          pollYes: 0,
+          pollNo: 0,
           createdAt: serverTimestamp()
         });
 
@@ -296,7 +364,7 @@
       }
     });
 
-    // Cargar publicaciones en Tiempo Real desde Firebase
+    // Cargar datos en Tiempo Real
     const q = query(confessionsRef, orderBy("createdAt", "desc"));
     
     onSnapshot(q, (snapshot) => {
@@ -305,108 +373,194 @@
         ...docSnap.data()
       }));
       renderPosts();
-    }, (error) => {
-      console.error("Error al sincronizar datos:", error);
-      postsFeed.innerHTML = `
-        <div class="glass-card rounded-2xl p-6 text-center text-red-400">
-          <i class="fa-solid fa-triangle-exclamation text-2xl mb-2"></i>
-          <p>No se pudo conectar a la base de datos. Verifica la configuración de Firebase.</p>
-        </div>
-      `;
     });
 
-    // Renderizar publicaciones en el DOM
+    // Buscador
+    searchInput.addEventListener("input", (e) => {
+      searchQuery = e.target.value.toLowerCase().trim();
+      renderPosts();
+    });
+
+    // Cambiar orden
+    toggleSortBtn.addEventListener("click", () => {
+      sortByPopularity = !sortByPopularity;
+      sortLabel.textContent = sortByPopularity ? "Más populares" : "Más recientes";
+      renderPosts();
+    });
+
+    // Confesión Aleatoria
+    randomPostBtn.addEventListener("click", () => {
+      if (allPosts.length === 0) return;
+      const randomPost = allPosts[Math.floor(Math.random() * allPosts.length)];
+      alert(`🎲 CONFESIÓN ALEATORIA:\n\n"${randomPost.content}"`);
+    });
+
+    // Renderizar publicaciones
     function renderPosts() {
-      const filtered = activeFilter === "todos" 
-        ? allPosts 
-        : allPosts.filter(p => p.category === activeFilter);
+      let filtered = [...allPosts];
+
+      if (activeFilter === "favoritos") {
+        filtered = filtered.filter(p => savedPostIds.includes(p.id));
+      } else if (activeFilter !== "todos") {
+        filtered = filtered.filter(p => p.category === activeFilter);
+      }
+
+      if (searchQuery) {
+        filtered = filtered.filter(p => 
+          p.content.toLowerCase().includes(searchQuery) || 
+          (p.tags && p.tags.toLowerCase().includes(searchQuery))
+        );
+      }
+
+      if (sortByPopularity) {
+        filtered.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+      }
 
       if (filtered.length === 0) {
         postsFeed.innerHTML = `
-          <div class="glass-card rounded-2xl p-8 text-center text-gray-400">
-            <i class="fa-solid fa-comment-slash text-3xl mb-3 text-sky-400/50"></i>
-            <p class="font-medium text-white">No hay confesiones en esta categoría aún.</p>
-            <p class="text-xs text-gray-500 mt-1">¡Sé la primera persona en compartir algo!</p>
+          <div class="glass-card rounded-3xl p-10 text-center text-gray-400">
+            <i class="fa-solid fa-comment-slash text-4xl mb-3 text-sky-400/50"></i>
+            <p class="font-bold text-white text-base">No se encontraron confesiones.</p>
+            <p class="text-xs text-gray-500 mt-1">Sé el primero en compartir algo nuevo.</p>
           </div>
         `;
         return;
       }
 
       postsFeed.innerHTML = filtered.map(post => {
-        const dateStr = post.createdAt?.toDate 
-          ? post.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-          : 'Hace un momento';
+        const timeStr = timeAgo(post.createdAt?.toDate ? post.createdAt.toDate() : null);
+        const isSaved = savedPostIds.includes(post.id);
+        const cardTheme = post.theme || 'theme-default';
 
         return `
-          <div class="glass-card rounded-2xl p-5 hover:border-gray-700/80 transition-all duration-200">
-            <div class="flex items-center justify-between mb-3">
+          <div class="rounded-3xl p-5 sm:p-6 ${cardTheme} transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+            <div class="flex items-center justify-between mb-3.5">
               <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr ${post.authorColor || 'from-sky-500 to-indigo-600'} flex items-center justify-center text-white text-sm shadow-md">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr ${post.authorColor || 'from-sky-500 to-indigo-600'} flex items-center justify-center text-white text-sm shadow-md">
                   <i class="fa-solid ${post.authorIcon || 'fa-user-secret'}"></i>
                 </div>
                 <div>
-                  <h4 class="font-bold text-sm text-gray-200">${post.authorName || 'Anónimo'}</h4>
-                  <span class="text-[10px] text-gray-500">${dateStr}</span>
+                  <h4 class="font-bold text-sm text-gray-100 tracking-tight">${post.authorName || 'Anónimo'}</h4>
+                  <span class="text-[11px] text-gray-400 flex items-center gap-1 font-medium"><i class="fa-regular fa-clock"></i>${timeStr}</span>
                 </div>
               </div>
-              <span class="bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2.5 py-0.5 rounded-full text-xs font-medium">
+              <span class="bg-sky-500/10 text-sky-400 border border-sky-500/20 px-3 py-1 rounded-full text-xs font-semibold">
                 ${post.category || 'Secreto'}
               </span>
             </div>
 
-            <p class="text-gray-200 text-sm leading-relaxed mb-4 whitespace-pre-line">${escapeHTML(post.content)}</p>
+            <p class="text-gray-100 text-sm sm:text-base leading-relaxed mb-3 whitespace-pre-line font-medium">${escapeHTML(post.content)}</p>
 
-            <div class="flex items-center justify-between pt-2 border-t border-gray-800/60 text-xs text-gray-400">
-              <button onclick="likePost('${post.id}')" class="flex items-center gap-1.5 hover:text-rose-400 transition-colors py-1 px-2.5 rounded-lg hover:bg-rose-500/10">
-                <i class="fa-regular fa-heart text-rose-500"></i>
-                <span class="font-medium text-gray-300">${post.likes || 0}</span>
+            ${post.tags ? `<p class="text-xs text-sky-400 font-bold mb-3">${escapeHTML(post.tags)}</p>` : ''}
+
+            <!-- Minitribuna / Encuesta rápida -->
+            <div class="flex items-center gap-2 bg-gray-950/60 p-2.5 rounded-2xl mb-3.5 border border-gray-800/80 text-xs">
+              <span class="text-gray-400 font-bold mr-1">¿Crees esta historia?</span>
+              <button onclick="votePoll('${post.id}', 'pollYes')" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-xl border border-emerald-500/20 font-semibold transition-all active:scale-95 flex items-center gap-1">
+                👍 Sí <span>(${post.pollYes || 0})</span>
               </button>
-              
-              <button onclick="copyPost('${escapeHTML(post.content)}')" class="hover:text-sky-400 transition-colors py-1 px-2.5 rounded-lg hover:bg-sky-500/10 flex items-center gap-1">
-                <i class="fa-regular fa-copy"></i>
-                <span>Copiar</span>
+              <button onclick="votePoll('${post.id}', 'pollNo')" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 px-3 py-1 rounded-xl border border-rose-500/20 font-semibold transition-all active:scale-95 flex items-center gap-1">
+                👎 Falso <span>(${post.pollNo || 0})</span>
               </button>
+            </div>
+
+            <div class="flex items-center justify-between pt-2.5 border-t border-gray-800/80 text-xs text-gray-400">
+              <button onclick="likePost('${post.id}')" class="flex items-center gap-1.5 hover:text-rose-400 transition-colors py-1 px-3 rounded-xl hover:bg-rose-500/10 active:scale-95">
+                <i class="fa-regular fa-heart text-rose-500 text-sm"></i>
+                <span class="font-bold text-gray-200 text-sm">${post.likes || 0}</span>
+              </button>
+
+              <div class="flex items-center gap-1">
+                <button onclick="shareWhatsApp('${escapeHTML(post.content)}')" title="Compartir en WhatsApp" class="hover:text-emerald-400 transition-colors p-2 rounded-xl hover:bg-emerald-500/10">
+                  <i class="fa-brands fa-whatsapp text-sm"></i>
+                </button>
+
+                <button onclick="speakText('${escapeHTML(post.content)}')" title="Escuchar en voz alta" class="hover:text-amber-400 transition-colors p-2 rounded-xl hover:bg-amber-500/10">
+                  <i class="fa-solid fa-volume-high text-sm"></i>
+                </button>
+
+                <button onclick="toggleBookmark('${post.id}')" title="Guardar en favoritos" class="hover:text-amber-400 transition-colors p-2 rounded-xl hover:bg-amber-500/10">
+                  <i class="${isSaved ? 'fa-solid text-amber-400' : 'fa-regular'} fa-star text-sm"></i>
+                </button>
+
+                <button onclick="copyPost('${escapeHTML(post.content)}')" title="Copiar texto" class="hover:text-sky-400 transition-colors p-2 rounded-xl hover:bg-sky-500/10">
+                  <i class="fa-regular fa-copy text-sm"></i>
+                </button>
+              </div>
             </div>
           </div>
         `;
       }).join('');
     }
 
-    // Sanitizar texto HTML
     function escapeHTML(str) {
       return str ? str.replace(/[&<>'"]/g, 
         tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
       ) : '';
     }
 
-    // Dar Like en tiempo real
     window.likePost = async (id) => {
       try {
         const postDoc = doc(db, "confessions", id);
-        await updateDoc(postDoc, {
-          likes: increment(1)
-        });
+        await updateDoc(postDoc, { likes: increment(1) });
       } catch (err) {
         console.error("Error al dar like:", err);
       }
     };
 
-    // Copiar contenido
+    window.votePoll = async (id, option) => {
+      try {
+        const postDoc = doc(db, "confessions", id);
+        await updateDoc(postDoc, { [option]: increment(1) });
+        showToast("¡Voto registrado!");
+      } catch (err) {
+        console.error("Error al votar:", err);
+      }
+    };
+
+    window.shareWhatsApp = (text) => {
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent('🤫 Mira esta confesión anónima:\n\n"' + text + '"\n\nLee más en: ' + window.location.href)}`;
+      window.open(url, '_blank');
+    };
+
+    window.speakText = (text) => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'es-ES';
+        window.speechSynthesis.speak(utterance);
+        showToast("Leyendo confesión...");
+      } else {
+        showToast("Tu navegador no admite síntesis de voz");
+      }
+    };
+
+    window.toggleBookmark = (id) => {
+      if (savedPostIds.includes(id)) {
+        savedPostIds = savedPostIds.filter(favId => favId !== id);
+        showToast("Eliminada de favoritos");
+      } else {
+        savedPostIds.push(id);
+        showToast("Guardada en tus favoritos ⭐");
+      }
+      localStorage.setItem('muro_favs', JSON.stringify(savedPostIds));
+      renderPosts();
+    };
+
     window.copyPost = (text) => {
       navigator.clipboard.writeText(text);
       showToast("Texto copiado al portapapeles");
     };
 
-    // Filtros por categoría
     document.getElementById("categoryFilters").addEventListener("click", (e) => {
       const btn = e.target.closest(".cat-pill");
       if (!btn) return;
 
       document.querySelectorAll(".cat-pill").forEach(b => {
-        b.className = "cat-pill bg-gray-800/80 text-gray-400 hover:text-gray-200 border border-gray-700/50 px-3 py-1 rounded-full text-xs font-medium transition-all";
+        b.className = "cat-pill bg-gray-900/80 text-gray-400 hover:text-gray-200 border border-gray-700/60 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all";
       });
 
-      btn.className = "cat-pill active bg-sky-500/20 text-sky-300 border border-sky-500/40 px-3 py-1 rounded-full text-xs font-medium transition-all";
+      btn.className = "cat-pill active bg-sky-500/20 text-sky-300 border border-sky-500/40 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all shadow-sm";
       activeFilter = btn.dataset.cat;
       renderPosts();
     });
