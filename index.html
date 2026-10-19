@@ -13,7 +13,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Icons CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- html2canvas CDN (Para exportar imágenes PNG HD) -->
+  <!-- html2canvas CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -79,7 +79,7 @@
         <div>
           <h1 class="font-extrabold text-lg text-white tracking-tight flex items-center gap-2">
             Muro Anónimo
-            <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2 py-0.5 rounded-full font-semibold">v4.0</span>
+            <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2 py-0.5 rounded-full font-semibold">v4.1</span>
           </h1>
           <p class="text-xs text-sky-400/90 flex items-center gap-1.5 font-medium">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400"></span>
@@ -89,7 +89,6 @@
       </div>
       
       <div class="flex items-center gap-2">
-        <!-- PWA Install Button -->
         <button id="pwaInstallBtn" class="hidden bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
           <i class="fa-solid fa-download"></i>
           <span class="hidden sm:inline">Instalar App</span>
@@ -177,7 +176,6 @@
         <i class="fa-solid fa-camera"></i> Generador de Imagen
       </div>
 
-      <!-- Recuadro para captura / descarga -->
       <div id="exportCanvasArea" class="bg-gray-950 p-6 rounded-2xl border border-gray-800 shadow-2xl text-left mb-4">
         <div class="flex items-center justify-between mb-3 border-b border-gray-800/80 pb-2">
           <span class="font-extrabold text-sm text-sky-400">Muro Anónimo</span>
@@ -482,6 +480,8 @@
           authorColor: avatar.color,
           authorIcon: avatar.icon,
           likes: 0,
+          voteCreible: 0,
+          voteFalso: 0,
           comments: [],
           createdAt: serverTimestamp()
         });
@@ -498,7 +498,7 @@
       }
     });
 
-    // Descargar tarjeta como Imagen PNG HD (Canvas Export)
+    // Descargar tarjeta como Imagen PNG HD
     downloadImageBtn.addEventListener("click", () => {
       playBeep(750, 'sine', 0.1);
       html2canvas(exportCanvasArea, {
@@ -600,7 +600,7 @@
               </div>
             </div>
 
-            <!-- Contenido con MODO SPOILER -->
+            <!-- Contenido de la confesión -->
             <div class="relative mb-3">
               <p id="content-${post.id}" class="text-gray-100 text-sm sm:text-base leading-relaxed whitespace-pre-line font-medium ${isSpoiler ? 'blur-spoiler' : ''}">
                 ${escapeHTML(post.content)}
@@ -616,6 +616,17 @@
             </div>
 
             ${post.tags ? `<p class="text-xs text-sky-400 font-bold mb-3">${escapeHTML(post.tags)}</p>` : ''}
+
+            <!-- ENCUESTA: ¿Crees esta historia? 👍 Sí / 👎 Falso -->
+            <div class="flex items-center gap-2 bg-gray-950/60 p-2.5 rounded-2xl mb-3.5 border border-gray-800/80 text-xs">
+              <span class="text-gray-400 font-bold mr-1">¿Crees esta historia?</span>
+              <button onclick="voteOption('${post.id}', 'voteCreible')" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-xl border border-emerald-500/20 font-semibold transition-all active:scale-95 flex items-center gap-1">
+                👍 Sí <span>(${post.voteCreible || 0})</span>
+              </button>
+              <button onclick="voteOption('${post.id}', 'voteFalso')" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 px-3 py-1 rounded-xl border border-rose-500/20 font-semibold transition-all active:scale-95 flex items-center gap-1">
+                👎 Falso <span>(${post.voteFalso || 0})</span>
+              </button>
+            </div>
 
             <!-- Acciones -->
             <div class="flex items-center justify-between pt-2.5 border-t border-gray-800/80 text-xs text-gray-400">
@@ -684,6 +695,17 @@
         tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
       ) : '';
     }
+
+    window.voteOption = async (id, field) => {
+      playBeep(600, 'sine', 0.08);
+      try {
+        const postDoc = doc(db, "confessions", id);
+        await updateDoc(postDoc, { [field]: increment(1) });
+        showToast("¡Voto registrado!");
+      } catch (err) {
+        console.error("Error al votar:", err);
+      }
+    };
 
     window.revealSpoiler = (id) => {
       playBeep(650, 'sine', 0.1);
