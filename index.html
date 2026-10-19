@@ -4,17 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Muro Anónimo - Confesiones & Historias</title>
+
+  <!-- PWA Web App Manifest data URI -->
+  <link rel="manifest" href="data:application/manifest+json;utf8,%7B%22name%22%3A%22Muro%20An%C3%B3nimo%22%2C%22short_name%22%3A%22MuroAnonimo%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23080c14%22%2C%22theme_color%22%3A%22%23080c14%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F1160%2F1160358.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
+  <meta name="theme-color" content="#080c14">
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Icons CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- html2canvas CDN (Para exportar imágenes PNG HD) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
   
   <style>
     * {
       font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .font-handwriting {
+      font-family: 'Caveat', cursive;
     }
     body {
       background-color: #080c14;
@@ -45,6 +55,12 @@
     .theme-ocean { background: linear-gradient(135deg, rgba(12, 74, 110, 0.35), rgba(15, 23, 42, 0.85)); border: 1px solid rgba(56, 189, 248, 0.3); box-shadow: 0 0 20px rgba(56, 189, 248, 0.1); }
     .theme-emerald { background: linear-gradient(135deg, rgba(6, 78, 59, 0.35), rgba(15, 23, 42, 0.85)); border: 1px solid rgba(52, 211, 153, 0.3); box-shadow: 0 0 20px rgba(52, 211, 153, 0.1); }
 
+    .blur-spoiler {
+      filter: blur(8px);
+      user-select: none;
+      transition: filter 0.3s ease;
+    }
+
     .custom-scrollbar::-webkit-scrollbar { width: 6px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.25); border-radius: 4px; }
@@ -63,7 +79,7 @@
         <div>
           <h1 class="font-extrabold text-lg text-white tracking-tight flex items-center gap-2">
             Muro Anónimo
-            <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2 py-0.5 rounded-full font-semibold">v2.0</span>
+            <span class="text-[10px] bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2 py-0.5 rounded-full font-semibold">v4.0</span>
           </h1>
           <p class="text-xs text-sky-400/90 flex items-center gap-1.5 font-medium">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400"></span>
@@ -73,6 +89,16 @@
       </div>
       
       <div class="flex items-center gap-2">
+        <!-- PWA Install Button -->
+        <button id="pwaInstallBtn" class="hidden bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
+          <i class="fa-solid fa-download"></i>
+          <span class="hidden sm:inline">Instalar App</span>
+        </button>
+
+        <button id="toggleSoundBtn" title="Efectos de sonido" class="bg-gray-900/80 hover:bg-gray-800 text-gray-400 hover:text-sky-400 p-2.5 rounded-xl text-sm transition-all border border-gray-700/60">
+          <i class="fa-solid fa-volume-xmark" id="soundIcon"></i>
+        </button>
+
         <button id="toggleSortBtn" title="Ordenar por populares" class="bg-gray-900/80 hover:bg-gray-800 text-amber-400 p-2.5 rounded-xl text-sm transition-all border border-gray-700/60 flex items-center gap-1.5 hover:shadow-md hover:shadow-amber-500/10">
           <i class="fa-solid fa-fire text-amber-400"></i>
           <span class="text-xs text-gray-300 font-semibold hidden sm:inline" id="sortLabel">Más recientes</span>
@@ -140,6 +166,36 @@
 
   </main>
 
+  <!-- Modal Polaroid / Exportar Imagen PNG HD -->
+  <div id="polaroidModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md hidden opacity-0 transition-opacity duration-200">
+    <div class="w-full max-w-sm bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 p-6 rounded-3xl border border-purple-500/30 shadow-2xl relative text-center transform scale-95 transition-transform duration-200" id="polaroidContainer">
+      <button id="closePolaroidModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-800">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="inline-flex items-center gap-2 bg-purple-500/20 text-purple-300 border border-purple-500/40 px-3 py-1 rounded-full text-xs font-bold mb-4">
+        <i class="fa-solid fa-camera"></i> Generador de Imagen
+      </div>
+
+      <!-- Recuadro para captura / descarga -->
+      <div id="exportCanvasArea" class="bg-gray-950 p-6 rounded-2xl border border-gray-800 shadow-2xl text-left mb-4">
+        <div class="flex items-center justify-between mb-3 border-b border-gray-800/80 pb-2">
+          <span class="font-extrabold text-sm text-sky-400">Muro Anónimo</span>
+          <span class="text-[10px] text-purple-400 font-bold">100% Anónimo</span>
+        </div>
+        <p id="polaroidText" class="text-gray-100 text-lg font-handwriting leading-relaxed mb-4"></p>
+        <div class="flex items-center justify-between text-[11px] text-gray-400 pt-2 border-t border-gray-800/60">
+          <span id="polaroidAuthor" class="font-bold text-gray-300">@SombraMisteriosa</span>
+          <span class="text-gray-500">muro-anonimo.web.app</span>
+        </div>
+      </div>
+
+      <button id="downloadImageBtn" class="w-full bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-lg flex items-center justify-center gap-2">
+        <i class="fa-solid fa-download"></i> Descargar Imagen PNG HD
+      </button>
+    </div>
+  </div>
+
   <!-- Publish Modal -->
   <div id="publishModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-200">
     <div class="glass-card w-full max-w-lg rounded-3xl p-6 relative border border-gray-700/80 shadow-2xl transform scale-95 transition-transform duration-200" id="modalContainer">
@@ -186,6 +242,14 @@
           </div>
         </div>
 
+        <div class="flex items-center justify-between bg-gray-950/60 p-3 rounded-xl border border-gray-800">
+          <label for="postIsSpoiler" class="text-xs font-bold text-gray-300 flex items-center gap-2 cursor-pointer">
+            <i class="fa-solid fa-eye-slash text-purple-400"></i>
+            Modo Spoiler / Censurar contenido
+          </label>
+          <input type="checkbox" id="postIsSpoiler" class="w-4 h-4 accent-purple-500 rounded cursor-pointer">
+        </div>
+
         <div>
           <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Hashtags (Opcional)</label>
           <input type="text" id="postTags" placeholder="ej: #crush #universidad #ex" class="w-full bg-gray-950/90 border border-gray-700 rounded-xl px-3 py-2 text-sm text-gray-200 focus:outline-none focus:border-sky-500">
@@ -214,7 +278,7 @@
   <!-- Firebase Integration Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, increment, serverTimestamp, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     // Credenciales de Firebase
     const firebaseConfig = {
@@ -239,6 +303,7 @@
     const postCategory = document.getElementById("postCategory");
     const postTheme = document.getElementById("postTheme");
     const postTags = document.getElementById("postTags");
+    const postIsSpoiler = document.getElementById("postIsSpoiler");
     const charCounter = document.getElementById("charCounter");
     const publishModal = document.getElementById("publishModal");
     const modalContainer = document.getElementById("modalContainer");
@@ -250,13 +315,75 @@
     const toggleSortBtn = document.getElementById("toggleSortBtn");
     const sortLabel = document.getElementById("sortLabel");
 
+    // Polaroid Modal Elements
+    const polaroidModal = document.getElementById("polaroidModal");
+    const polaroidContainer = document.getElementById("polaroidContainer");
+    const closePolaroidModalBtn = document.getElementById("closePolaroidModalBtn");
+    const polaroidText = document.getElementById("polaroidText");
+    const polaroidAuthor = document.getElementById("polaroidAuthor");
+    const downloadImageBtn = document.getElementById("downloadImageBtn");
+    const exportCanvasArea = document.getElementById("exportCanvasArea");
+
+    // PWA Support
+    let deferredPrompt;
+    const pwaInstallBtn = document.getElementById("pwaInstallBtn");
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      pwaInstallBtn.classList.remove('hidden');
+    });
+
+    pwaInstallBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          pwaInstallBtn.classList.add('hidden');
+        }
+        deferredPrompt = null;
+      }
+    });
+
+    // Sound FX
+    const toggleSoundBtn = document.getElementById("toggleSoundBtn");
+    const soundIcon = document.getElementById("soundIcon");
+    let soundEnabled = false;
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(freq = 440, type = 'sine', duration = 0.08) {
+      if (!soundEnabled) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    toggleSoundBtn.addEventListener("click", () => {
+      soundEnabled = !soundEnabled;
+      if (soundEnabled) {
+        soundIcon.className = "fa-solid fa-volume-high text-sky-400";
+        playBeep(600, 'sine', 0.1);
+        showToast("Efectos de sonido activados 🔊");
+      } else {
+        soundIcon.className = "fa-solid fa-volume-xmark text-gray-400";
+        showToast("Efectos de sonido desactivados 🔇");
+      }
+    });
+
     let activeFilter = "todos";
     let searchQuery = "";
     let sortByPopularity = false;
     let allPosts = [];
     let savedPostIds = JSON.parse(localStorage.getItem('muro_favs') || '[]');
 
-    // Avatares Anónimos
     const anonymousAvatars = [
       { name: "Sombra Misteriosa", color: "from-purple-500 to-indigo-600", icon: "fa-ghost" },
       { name: "Pensador Nocturno", color: "from-blue-500 to-cyan-600", icon: "fa-moon" },
@@ -269,8 +396,8 @@
       return anonymousAvatars[Math.floor(Math.random() * anonymousAvatars.length)];
     }
 
-    // Modal Handlers
     function openModal() {
+      playBeep(520, 'triangle', 0.1);
       publishModal.classList.remove("hidden");
       setTimeout(() => {
         publishModal.classList.remove("opacity-0");
@@ -294,6 +421,12 @@
       if (e.target === publishModal) closeModal();
     });
 
+    closePolaroidModalBtn.addEventListener("click", () => {
+      polaroidModal.classList.add("opacity-0");
+      polaroidContainer.classList.add("scale-95");
+      setTimeout(() => polaroidModal.classList.add("hidden"), 200);
+    });
+
     postContent.addEventListener("input", (e) => {
       charCounter.textContent = `${e.target.value.length} / 1000`;
     });
@@ -307,7 +440,6 @@
       }, 3000);
     }
 
-    // Formateador de Tiempo Relativo
     function timeAgo(date) {
       if (!date) return 'Hace un momento';
       const seconds = Math.floor((new Date() - date) / 1000);
@@ -324,13 +456,14 @@
       return 'Hace un momento';
     }
 
-    // Guardar publicación
+    // Publicar confesión
     confessionForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const content = postContent.value.trim();
       const category = postCategory.value;
       const theme = postTheme.value;
       const tags = postTags.value.trim();
+      const isSpoiler = postIsSpoiler.checked;
 
       if (!content) return;
 
@@ -344,15 +477,16 @@
           category: category,
           theme: theme || 'theme-default',
           tags: tags || '',
+          isSpoiler: isSpoiler,
           authorName: avatar.name,
           authorColor: avatar.color,
           authorIcon: avatar.icon,
           likes: 0,
-          pollYes: 0,
-          pollNo: 0,
+          comments: [],
           createdAt: serverTimestamp()
         });
 
+        playBeep(880, 'sine', 0.15);
         closeModal();
         showToast("¡Tu confesión ha sido publicada!");
       } catch (error) {
@@ -364,7 +498,21 @@
       }
     });
 
-    // Cargar datos en Tiempo Real
+    // Descargar tarjeta como Imagen PNG HD (Canvas Export)
+    downloadImageBtn.addEventListener("click", () => {
+      playBeep(750, 'sine', 0.1);
+      html2canvas(exportCanvasArea, {
+        backgroundColor: '#080c14',
+        scale: 2
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `confesion-anonima-${Date.now()}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        showToast("¡Imagen PNG descargada! 📸");
+      });
+    });
+
     const q = query(confessionsRef, orderBy("createdAt", "desc"));
     
     onSnapshot(q, (snapshot) => {
@@ -375,27 +523,25 @@
       renderPosts();
     });
 
-    // Buscador
     searchInput.addEventListener("input", (e) => {
       searchQuery = e.target.value.toLowerCase().trim();
       renderPosts();
     });
 
-    // Cambiar orden
     toggleSortBtn.addEventListener("click", () => {
+      playBeep(400, 'square', 0.05);
       sortByPopularity = !sortByPopularity;
       sortLabel.textContent = sortByPopularity ? "Más populares" : "Más recientes";
       renderPosts();
     });
 
-    // Confesión Aleatoria
     randomPostBtn.addEventListener("click", () => {
+      playBeep(700, 'sine', 0.1);
       if (allPosts.length === 0) return;
       const randomPost = allPosts[Math.floor(Math.random() * allPosts.length)];
       alert(`🎲 CONFESIÓN ALEATORIA:\n\n"${randomPost.content}"`);
     });
 
-    // Renderizar publicaciones
     function renderPosts() {
       let filtered = [...allPosts];
 
@@ -431,6 +577,8 @@
         const timeStr = timeAgo(post.createdAt?.toDate ? post.createdAt.toDate() : null);
         const isSaved = savedPostIds.includes(post.id);
         const cardTheme = post.theme || 'theme-default';
+        const comments = post.comments || [];
+        const isSpoiler = post.isSpoiler || false;
 
         return `
           <div class="rounded-3xl p-5 sm:p-6 ${cardTheme} transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
@@ -444,33 +592,50 @@
                   <span class="text-[11px] text-gray-400 flex items-center gap-1 font-medium"><i class="fa-regular fa-clock"></i>${timeStr}</span>
                 </div>
               </div>
-              <span class="bg-sky-500/10 text-sky-400 border border-sky-500/20 px-3 py-1 rounded-full text-xs font-semibold">
-                ${post.category || 'Secreto'}
-              </span>
+              <div class="flex items-center gap-2">
+                ${isSpoiler ? `<span class="bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2.5 py-0.5 rounded-full text-xs font-bold"><i class="fa-solid fa-eye-slash text-[10px]"></i> Spoiler</span>` : ''}
+                <span class="bg-sky-500/10 text-sky-400 border border-sky-500/20 px-3 py-1 rounded-full text-xs font-semibold">
+                  ${post.category || 'Secreto'}
+                </span>
+              </div>
             </div>
 
-            <p class="text-gray-100 text-sm sm:text-base leading-relaxed mb-3 whitespace-pre-line font-medium">${escapeHTML(post.content)}</p>
+            <!-- Contenido con MODO SPOILER -->
+            <div class="relative mb-3">
+              <p id="content-${post.id}" class="text-gray-100 text-sm sm:text-base leading-relaxed whitespace-pre-line font-medium ${isSpoiler ? 'blur-spoiler' : ''}">
+                ${escapeHTML(post.content)}
+              </p>
+
+              ${isSpoiler ? `
+                <div id="spoilerOverlay-${post.id}" class="absolute inset-0 flex items-center justify-center">
+                  <button onclick="revealSpoiler('${post.id}')" class="bg-purple-600 hover:bg-purple-500 text-white font-extrabold px-4 py-2 rounded-2xl text-xs transition-all shadow-lg flex items-center gap-2 active:scale-95 border border-purple-400/40">
+                    <i class="fa-solid fa-eye"></i> Revelar Secreto
+                  </button>
+                </div>
+              ` : ''}
+            </div>
 
             ${post.tags ? `<p class="text-xs text-sky-400 font-bold mb-3">${escapeHTML(post.tags)}</p>` : ''}
 
-            <!-- Minitribuna / Encuesta rápida -->
-            <div class="flex items-center gap-2 bg-gray-950/60 p-2.5 rounded-2xl mb-3.5 border border-gray-800/80 text-xs">
-              <span class="text-gray-400 font-bold mr-1">¿Crees esta historia?</span>
-              <button onclick="votePoll('${post.id}', 'pollYes')" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-xl border border-emerald-500/20 font-semibold transition-all active:scale-95 flex items-center gap-1">
-                👍 Sí <span>(${post.pollYes || 0})</span>
-              </button>
-              <button onclick="votePoll('${post.id}', 'pollNo')" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 px-3 py-1 rounded-xl border border-rose-500/20 font-semibold transition-all active:scale-95 flex items-center gap-1">
-                👎 Falso <span>(${post.pollNo || 0})</span>
-              </button>
-            </div>
-
+            <!-- Acciones -->
             <div class="flex items-center justify-between pt-2.5 border-t border-gray-800/80 text-xs text-gray-400">
-              <button onclick="likePost('${post.id}')" class="flex items-center gap-1.5 hover:text-rose-400 transition-colors py-1 px-3 rounded-xl hover:bg-rose-500/10 active:scale-95">
-                <i class="fa-regular fa-heart text-rose-500 text-sm"></i>
-                <span class="font-bold text-gray-200 text-sm">${post.likes || 0}</span>
-              </button>
+              <div class="flex items-center gap-3">
+                <button onclick="likePost('${post.id}')" class="flex items-center gap-1.5 hover:text-rose-400 transition-colors py-1 px-2.5 rounded-xl hover:bg-rose-500/10 active:scale-95">
+                  <i class="fa-regular fa-heart text-rose-500 text-sm"></i>
+                  <span class="font-bold text-gray-200 text-sm">${post.likes || 0}</span>
+                </button>
+
+                <button onclick="toggleComments('${post.id}')" class="flex items-center gap-1.5 hover:text-sky-400 transition-colors py-1 px-2.5 rounded-xl hover:bg-sky-500/10">
+                  <i class="fa-regular fa-comment text-sm"></i>
+                  <span class="font-bold text-gray-200 text-xs">${comments.length} Respuestas</span>
+                </button>
+              </div>
 
               <div class="flex items-center gap-1">
+                <button onclick="openPolaroid('${escapeHTML(post.content)}', '${post.authorName || 'Anónimo'}')" title="Descargar como Imagen PNG HD" class="hover:text-purple-400 transition-colors p-2 rounded-xl hover:bg-purple-500/10">
+                  <i class="fa-solid fa-camera text-sm"></i>
+                </button>
+
                 <button onclick="shareWhatsApp('${escapeHTML(post.content)}')" title="Compartir en WhatsApp" class="hover:text-emerald-400 transition-colors p-2 rounded-xl hover:bg-emerald-500/10">
                   <i class="fa-brands fa-whatsapp text-sm"></i>
                 </button>
@@ -488,6 +653,27 @@
                 </button>
               </div>
             </div>
+
+            <!-- Respuestas Anónimas -->
+            <div id="comments-${post.id}" class="hidden mt-4 pt-3 border-t border-gray-800/60 space-y-3">
+              <div class="space-y-2 max-h-40 overflow-y-auto custom-scrollbar">
+                ${comments.length === 0 ? '<p class="text-xs text-gray-500 italic">No hay respuestas aún. ¡Sé el primero!</p>' : ''}
+                ${comments.map(c => `
+                  <div class="bg-gray-950/70 rounded-xl p-2.5 border border-gray-800/80 text-xs">
+                    <span class="font-bold text-sky-400">Anónimo:</span>
+                    <span class="text-gray-300 ml-1 font-medium">${escapeHTML(c.text)}</span>
+                  </div>
+                `).join('')}
+              </div>
+
+              <div class="flex gap-2">
+                <input type="text" id="input-comment-${post.id}" placeholder="Escribe una respuesta anónima..." class="flex-1 bg-gray-950/90 border border-gray-700/80 rounded-xl px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-sky-500">
+                <button onclick="addComment('${post.id}')" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-3 py-2 rounded-xl text-xs transition-all active:scale-95">
+                  Responder
+                </button>
+              </div>
+            </div>
+
           </div>
         `;
       }).join('');
@@ -499,7 +685,27 @@
       ) : '';
     }
 
+    window.revealSpoiler = (id) => {
+      playBeep(650, 'sine', 0.1);
+      const content = document.getElementById(`content-${id}`);
+      const overlay = document.getElementById(`spoilerOverlay-${id}`);
+      if (content) content.classList.remove('blur-spoiler');
+      if (overlay) overlay.classList.add('hidden');
+    };
+
+    window.openPolaroid = (text, author) => {
+      playBeep(650, 'sine', 0.1);
+      polaroidText.textContent = `"${text}"`;
+      polaroidAuthor.textContent = `@${author}`;
+      polaroidModal.classList.remove("hidden");
+      setTimeout(() => {
+        polaroidModal.classList.remove("opacity-0");
+        polaroidContainer.classList.remove("scale-95");
+      }, 10);
+    };
+
     window.likePost = async (id) => {
+      playBeep(800, 'sine', 0.08);
       try {
         const postDoc = doc(db, "confessions", id);
         await updateDoc(postDoc, { likes: increment(1) });
@@ -508,13 +714,27 @@
       }
     };
 
-    window.votePoll = async (id, option) => {
+    window.toggleComments = (id) => {
+      playBeep(450, 'triangle', 0.05);
+      const el = document.getElementById(`comments-${id}`);
+      el.classList.toggle("hidden");
+    };
+
+    window.addComment = async (id) => {
+      const input = document.getElementById(`input-comment-${id}`);
+      const text = input.value.trim();
+      if (!text) return;
+
+      playBeep(600, 'sine', 0.1);
       try {
         const postDoc = doc(db, "confessions", id);
-        await updateDoc(postDoc, { [option]: increment(1) });
-        showToast("¡Voto registrado!");
+        await updateDoc(postDoc, {
+          comments: arrayUnion({ text: text, date: new Date().toISOString() })
+        });
+        input.value = "";
+        showToast("Respuesta enviada");
       } catch (err) {
-        console.error("Error al votar:", err);
+        console.error("Error al responder:", err);
       }
     };
 
@@ -536,6 +756,7 @@
     };
 
     window.toggleBookmark = (id) => {
+      playBeep(500, 'sine', 0.08);
       if (savedPostIds.includes(id)) {
         savedPostIds = savedPostIds.filter(favId => favId !== id);
         showToast("Eliminada de favoritos");
@@ -548,6 +769,7 @@
     };
 
     window.copyPost = (text) => {
+      playBeep(400, 'sine', 0.05);
       navigator.clipboard.writeText(text);
       showToast("Texto copiado al portapapeles");
     };
@@ -556,6 +778,7 @@
       const btn = e.target.closest(".cat-pill");
       if (!btn) return;
 
+      playBeep(350, 'triangle', 0.05);
       document.querySelectorAll(".cat-pill").forEach(b => {
         b.className = "cat-pill bg-gray-900/80 text-gray-400 hover:text-gray-200 border border-gray-700/60 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all";
       });
